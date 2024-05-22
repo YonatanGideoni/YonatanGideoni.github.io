@@ -58,11 +58,6 @@
         }
         .footnote {
             position: relative;
-            cursor: pointer;
-            color: #007acc;
-        }
-        .footnote:hover .footnote-text {
-            display: block;
         }
         .footnote-text {
             display: none;
@@ -77,6 +72,13 @@
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             font-size: 0.9em;
         }
+        sup {
+            vertical-align: super;
+            font-size: smaller;
+        }
+        .footnote:hover .footnote-text {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -86,7 +88,7 @@
         </header>
         <div class="profile-section">
             <div class="intro">
-                <p>Hello! I'm Yonatan, a DPhil<span class="footnote">^1<span class="footnote-text">UK speak for PhD</span></span> student at Oxford. I'm part of OATML<span class="footnote">^2<span class="footnote-text">both Oxford Applied and Theoretical Machine Learning and my typical breakfast</span></span> and a DPhil programme called AIMS<span class="footnote">^3<span class="footnote-text">Autonomous Intelligent Machines and Systems, we're not building killer robots I promise</span></span>. I'm lucky to be funded by Rhodes<span class="footnote">^4<span class="footnote-text">the scholarship, not the island</span></span> and AIMS.</p>
+                <p>Hello! I'm Yonatan, a DPhil<span class="footnote"><sup>1</sup><span class="footnote-text">UK speak for PhD</span></span> student at Oxford. I'm part of OATML<span class="footnote"><sup>2</sup><span class="footnote-text">both Oxford Applied and Theoretical Machine Learning and my typical breakfast</span></span> and a DPhil programme called AIMS<span class="footnote"><sup>3</sup><span class="footnote-text">Autonomous Intelligent Machines and Systems, we're not building killer robots I promise</span></span>. I'm lucky to be funded by Rhodes<span class="footnote"><sup>4</sup><span class="footnote-text">the scholarship, not the island</span></span> and AIMS.</p>
             </div>
             <img src="profile-pic.jpg" alt="Profile Picture" class="profile-pic">
         </div>
