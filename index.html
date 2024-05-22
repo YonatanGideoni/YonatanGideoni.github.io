@@ -10,53 +10,47 @@
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #f4f4f4;
         }
         .container {
-            background-color: #fff;
+            width: 80%;
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 8px;
+            background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            width: 100%;
         }
-        .header, .footer {
+        header {
             text-align: center;
+            margin-bottom: 20px;
         }
-        .header img {
-            border-radius: 50%;
+        header h1 {
+            margin: 0;
+        }
+        .profile-pic {
+            display: block;
+            margin: 0 auto;
             width: 150px;
             height: 150px;
-        }
-        .header h1 {
-            margin: 10px 0;
+            border-radius: 50%;
+            object-fit: cover;
         }
         .intro {
-            display: flex;
-            align-items: center;
+            text-align: center;
             margin-top: 20px;
         }
-        .intro img {
-            border-radius: 8px;
-            width: 150px;
-            height: 150px;
-            margin-right: 20px;
+        .contact {
+            margin-top: 20px;
+            text-align: center;
         }
-        .bio {
-            max-width: 600px;
-        }
-        .contact, .links {
+        .links {
+            text-align: center;
             margin-top: 20px;
         }
         .links a {
-            display: inline-block;
             margin: 0 10px;
             text-decoration: none;
-            color: #0066cc;
+            color: #007acc;
         }
         .links a:hover {
             text-decoration: underline;
@@ -65,30 +59,26 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <img src="profile-picture.jpg" alt="Profile Picture">
+        <header>
             <h1>Your Name</h1>
-        </div>
+            <img src="profile-pic.jpg" alt="Profile Picture" class="profile-pic">
+        </header>
         <div class="intro">
-            <img src="profile-picture.jpg" alt="Profile Picture">
-            <div class="bio">
-                <p>Welcome! I am [Your Name], a [Your Position] at [Your Institution]. My research focuses on [Your Research Area]. Feel free to browse through my profile to learn more about my work and how to get in touch.</p>
-            </div>
+            <p>Welcome to my academic profile! I am an Associate Professor at XYZ University. My research interests include artificial intelligence, machine learning, and data science. I am passionate about exploring new frontiers in technology and sharing knowledge with students and the academic community.</p>
         </div>
         <div class="contact">
             <h2>Contact Information</h2>
-            <p>Email: your.email@example.com</p>
-            <p>Office: Your Office Address</p>
+            <p>Email: your.email@university.edu</p>
+            <p>Office: Room 123, ABC Building, XYZ University</p>
             <p>Phone: (123) 456-7890</p>
         </div>
         <div class="links">
             <h2>Links</h2>
-            <a href="https://scholar.google.com" target="_blank">Google Scholar</a>
-            <a href="https://groupwebsite.com" target="_blank">Group Website</a>
-            <a href="advising.html">Advising</a>
-        </div>
-        <div class="footer">
-            <p>&copy; 2024 Your Name</p>
+            <p>
+                <a href="https://scholar.google.com" target="_blank">Google Scholar</a> |
+                <a href="https://your-group-website.com" target="_blank">Research Group</a> |
+                <a href="advising.html">Advising</a>
+            </p>
         </div>
     </div>
 </body>
