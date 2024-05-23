@@ -50,6 +50,29 @@
         a:hover {
             text-decoration: underline;
         }
+        .footnote {
+            position: relative;
+        }
+        .footnote-text {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 5px;
+            width: 200px;
+            z-index: 10;
+            bottom: 1.5em;
+            left: 1.5em;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            font-size: 0.9em;
+        }
+        sup {
+            vertical-align: super;
+            font-size: smaller;
+        }
+        .footnote:hover .footnote-text {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -68,7 +91,7 @@
             <ul>
                 <li>Insane grades</li>
                 <li>To have started coding when they were 5</li>
-                <li>To be at a certain stage in life^1{I've advised wonderful high school students' projects before. Middle school would be tough, maybe one day.}</li>
+                <li>To be at a certain stage in life<span class="footnote"><sup>1</sup><span class="footnote-text">I've advised wonderful high school students' projects before. Middle school would be tough, maybe one day.</span></span></li>
             </ul>
             <p>Wonderful nonorthodox things can happen for students that know what they want. If your idea of a successful project is one that ends with a publication, dream bigger🙂</p>
         </div>
