@@ -8,7 +8,7 @@
   <!-- include libs (CDN or local). Must be loaded before processor uses them -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  <link rel="stylesheet" href="/assets/styles.css">
+  <link rel="stylesheet" href="/blog/assets/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked-katex-extension/lib/index.umd.js"></script>
 
@@ -20,7 +20,7 @@
 
   <!-- The processor module (relative path from this file) -->
   <script type="module">
-    import { renderPost } from '/assets/processor.js';
+    import { renderPost } from '/blog/assets/processor.js';
 
     // call the shared renderer with the post's markdown + bib
     renderPost({
