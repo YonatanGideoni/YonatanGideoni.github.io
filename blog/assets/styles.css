@@ -14,7 +14,7 @@ body {
 
 /* Centered content container (partial width) */
 .container {
-    width: 80%;
+    width: 40%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;

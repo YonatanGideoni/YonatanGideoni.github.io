@@ -21,7 +21,7 @@ code: "TODO"
 
 A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and, as a sanity, ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
 
-![The AlphaEvolve circle-packing bound can be achieved by just repeatedly sampling an LLM. | 20%](images/circle-packing-sampling.png)
+![The AlphaEvolve circle-packing bound can be achieved by just repeatedly sampling an LLM. | 40%](./images/circle-packing-sampling.png)
 
 This led me down a rabbit hole, comparing some simple baselines to much fancier code evolution methods and finding that the baselines often get the same or even better performance. Trying to understand why the simple methods worked so well uncovered various insights and shortcomings with how code evolution is used.
 
@@ -31,13 +31,13 @@ In this context, code evolution means using a language model to find programs th
 
 One interesting use-case of code evolution is to find new, improved mathematical bounds. To illustrate, consider the circle packing problem -- given a unit square with $n$ circles, what should their centers and radii be so the sum of radii is maximized? One way to find a bound is by proposing a set of centers and radii, where -- if the configuration is valid -- gives a lower bound on the max sum of radii. Code evolution finds a program that either constructs such a packing directly or itself automatically searches over different configurations.
 
-![Each problem defines a verifier that gets as input a list of numbers and outputs a bound that should be maximized/minimized. | 40%](images/probs_as_funcs.jpg)
+![Each problem defines a verifier that gets as input a list of numbers and outputs a bound that should be maximized/minimized. | 80%](./images/probs_as_funcs.jpg)
 
 ## Baselines
 
 We tested two fairly simple baselines. The first is IID random sampling (IID RS) from an LLM -- asking it to produce code that solves some problem and sampling from it many times. The second baseline, sequential conditioned sampling (SCS), is very similar but is aimed at better handling sequential problems, e.g. where the solution results from iteratively growing a list over time. Specifically, after generating a set of programs, some of those that ran successfully are randomly picked to be appended to the prompt when generating a program in the next generation. This is repeated for a few generations^[{In the evolutionary algorithms sense of the word.}] and, optionally, then restarted from scratch.
 
-![The two baselines. | 40%](images/baselines.png)
+![The two baselines. | 100%](./images/baselines.png)
 
 ## Simple baselines are competitive in discovering mathematical bounds
 
@@ -45,7 +45,7 @@ As AlphaEvolve is closed source, for a fair comparison we compare the baselines 
 
 [add figure you had in your poster, match/exceed on X problems, side by side with budget plot]
 
-![Both baseline's performance is consistent across a range of budgets. | 60%](./images/prob_match_exceed_v_budget.png)
+![Both baseline's performance is consistent across a range of budgets. | 100%](./images/prob_match_exceed_v_budget.png)
 
 I found these results pretty surprising. Most code evolution pipelines, like Alpha/Shinka/OpenEvolve [@novikov2025alphaevolve;@lange2025shinkaevolve;@openevolve], seem to have taken a lot of work and involve many design choices, so I didn't expect methods that you can code up in a few hours to be so competitive. If many of the search's design choices minimally affect the discovered bounds, then what does?
 
@@ -93,7 +93,7 @@ We modify this formulation in two ways. First, AlphaEvolve uses physicist's Herm
 
 Code evolution is often claimed to be an open-ended search process, where given sufficient time any novel solution can be discovered as most programming languages are Turing complete [@hu2024automated]. However, the verifiers, which evidently significantly affect both the search's performance ceiling and efficiency, are fixed. Thus, __code evolution is open-ended only within the confines of a box, whereas searching outside of that box is what matters__.
 
-![Code evolution is currently open-ended only within a problem's defined search space, while meaningful improvements (and meaningful open-endedness) requires going beyond it. | 60%](images/open-endedness.jpg)
+![Code evolution is currently open-ended only within a problem's defined search space, while meaningful improvements (and meaningful open-endedness) requires going beyond it. | 100%](./images/open-endedness.jpg)
 
 True open-endedness would be capable of changing everything, including the verifier and hence the search space itself. This is nontrivial as the new verifier must still yield valid bounds, thereby constraining possible modifications.^[{While some modifications, like the circle packing linear program, could feasibly be generated within the confines of the current setup, in practice I didn't see any similar programs generated.}]
 
@@ -142,11 +142,11 @@ Thus, searching for a scaffold amounts to doing regular code evolution, albeit w
 
 Specifically for finding agentic scaffolds, I noticed an odd result: while the IID RS baseline seemingly outperformed scaffolds found using other code evolution methods, it fell short of a hand-designed majority vote baseline. Majority vote means generating $k$ answers, with $k$ here being 5 or 10, and picking the most prevalent one as the answer.
 
-![Scaffolds found with code evolution can seem performant due to the evaluation's inherent stochasticity -- re-evaluating shows that they were just lucky. | 100%](images/aime_methods_compare.png)
+![Scaffolds found with code evolution can seem performant due to the evaluation's inherent stochasticity -- re-evaluating shows that they were just lucky. | 100%](./images/aime_methods_compare.png)
 
 Independently re-evaluating all scaffolds more times revealed what's going on, that the selected scaffolds were luckier than they were performant. To keep the evaluation economic scaffolds are typically evaluated on relatively small datasets, having effectively ~100 questions (including repeats). This results in very noisy evaluations, with a majority vote@5 scaffold still having a standard deviation of ~1% when evaluated on AIME 2025 10 times.^[{Each AIME year has 30 questions, so re-evaluating a scaffold 10 times results in an effective dataset size of 300 questions.}] Thus, when automatically searching over scaffolds many of the best performing scaffolds could only seem well performing, whereas in practice due to the stochasticity they were just lucky.
 
-![Accuracy distribution for a majority vote@5 scaffold evaluated on AIME 2025. In typical setups, where the dataset is evaluated only 3 times, noise in the sampled accuracies can wash out the underlying signal. | 40%](images/aime_majv5_dist.png)
+![Accuracy distribution for a majority vote@5 scaffold evaluated on AIME 2025. In typical setups, where the dataset is evaluated only 3 times, noise in the sampled accuracies can wash out the underlying signal. | 70%](./images/aime_majv5_dist.png)
 
 This can be solved using a) an evaluation cascade and b) better comparing different scaffolds. The evaluation cascade independently re-evaluates high-performing scaffolds, using more samples or a larger dataset than before, to find a better estimate of a scaffold's true performance. While it is possible to then pick the scaffold with the highest mean performance, this could be misleading, as a high mean could still be due to a single lucky highly performant evaluation. To mitigate this we recommend using the _probability of dominance_, a generalization of Agarwal et al.'s [@agarwal2021deep] probability of improvement. The probability of dominance estimates the probability method (scaffold) $A_1$ outperforms methods $A_2,A_3,...A_M$, thereby being more robust than point estimates as it relies on the entire distribution of sampled accuracies. Using an evaluation cascade in conjunction with the probability of dominance to pick the best scaffold enables finding a scaffold that robustly achieves better performance.
 
