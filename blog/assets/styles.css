@@ -1,0 +1,435 @@
+/* =========================================================
+   Global layout
+   ========================================================= */
+
+body {
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background: #e8ecf0; /* light grey page background */
+    font-family: -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    counter-reset: footnote;
+}
+
+/* Centered content container (partial width) */
+.container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Optional header spacing */
+header {
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+
+/* =========================================================
+   Links
+   ========================================================= */
+
+a {
+    text-decoration: none;
+    color: #007acc;
+}
+
+a:visited {
+    color: #007acc;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   Markdown Content Styling
+   ========================================================= */
+
+#content h1 {
+    margin-top: 0;
+}
+
+#content h2 {
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.3em;
+}
+
+#content h3 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+#content p {
+    margin: 0.8em 0;
+}
+
+#content code {
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.95em;
+}
+
+#content pre {
+    background-color: #f4f4f4;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+#content pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+#content blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 15px;
+    margin-left: 0;
+    color: #666;
+}
+
+#content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+}
+
+#content details {
+    margin: 1em 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-left: 3px solid #007acc;
+    border-radius: 4px;
+}
+
+#content summary {
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+
+/* =========================================================
+   Inline Footnotes (^[{...}])
+   ========================================================= */
+
+.fn-tooltip {
+    position: absolute;
+    display: none;
+    background: #333;
+    color: #fff;
+    padding: 0.5em 0.75em;
+    border-radius: 6px;
+    max-width: 360px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 9998;
+    font-size: 0.95rem;
+}
+
+.fn {
+    counter-increment: footnote;
+    vertical-align: super;
+    font-size: 0.8em;
+    cursor: pointer;
+    color: #007acc;
+}
+
+.fn::before {
+    content: counter(footnote);
+    margin-right: 0.25em;
+}
+
+
+/* =========================================================
+   Citation Superscripts
+   ========================================================= */
+
+.cite {
+    color: #097;
+    cursor: default;
+    outline: none;
+}
+
+sup {
+    vertical-align: super;
+    font-size: 0.75em;
+}
+
+
+/* =========================================================
+   Citation Popup
+   ========================================================= */
+
+.citation-popup {
+    position: absolute;
+    display: none;
+    background: #111;
+    color: #eef;
+    padding: 12px;
+    border-radius: 8px;
+    max-width: 560px;
+    font-size: 0.95rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+}
+
+.citation-popup .title {
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-style: italic;
+    line-height: 1.25;
+}
+
+.citation-popup .meta {
+    color: #9aa4b2;
+    font-size: 0.92rem;
+}
+
+.citation-popup hr.sep {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 8px 0;
+}
+
+
+/* =========================================================
+   References Section
+   ========================================================= */
+
+#references {
+    margin-top: 40px;
+}
+
+#references h2 {
+    margin-bottom: 0.5em;
+}
+
+.bib-item {
+    margin: 6px 0;
+}
+
+/* =========================================================
+   Post Frontmatter (title, authors, image, tags)
+   ========================================================= */
+
+/* ---- frontmatter / author layout --------------------------------- */
+.post-front {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.post-front .post-front-content {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+/* main area */
+.pf-main {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.pf-title {
+    margin: 0 0 8px 0;
+    font-size: 26px;
+    line-height: 1.12;
+    font-weight: 700;
+    color: #111;
+}
+
+/* AUTHORS: layout left-to-right; each author is a vertical block */
+.pf-authors {
+    margin-top: 8px;
+    display: flex;
+    gap: 24px; /* horizontal gap between authors */
+    flex-wrap: wrap; /* wrap on small screens */
+    align-items: flex-start;
+}
+
+.pf-author {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    max-width: 220px; /* keeps each author column compact */
+}
+
+.pf-author .author-link,
+.pf-author .author-name {
+    font-size: 15px;
+    color: #111;
+    text-decoration: none;
+}
+
+.pf-author .author-link:hover {
+    text-decoration: underline;
+}
+
+/* affiliations stacked vertically */
+.author-affiliations {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.35;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.author-aff {
+    display: block;
+}
+
+/* Links row */
+.pf-links {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.meta-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.meta-link--orange {
+    color: #ff7a18;
+    text-decoration: none;
+}
+
+/* worldmodels-style orange */
+.meta-link--orange:hover {
+    text-decoration: underline;
+}
+
+/* tags */
+.pf-tags {
+    margin-top: 10px;
+}
+
+.pf-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    margin-right: 6px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.04);
+    color: #374151;
+}
+
+/* image placement: above on small screens, to the right on wide */
+.pf-image {
+    flex: 0 0 240px;
+    max-width: 240px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.pf-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+}
+
+@media (max-width: 720px) {
+    .post-front .post-front-content {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .pf-image {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* stack authors vertically on very small screens if you prefer */
+    .pf-authors {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* =========================================================
+   Figures
+   ========================================================= */
+.post-figure {
+    margin: 2.5rem 0;
+    text-align: center;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post-figure img, .post-figure .post-figure__embed iframe, .post-figure .post-figure__embed object {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+}
+
+.post-figure figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.92rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.figure--left {
+    float: left;
+    margin-right: 1rem;
+    width: auto;
+}
+
+.figure--right {
+    float: right;
+    margin-left: 1rem;
+    width: auto;
+}
+
+.figure--center {
+    margin-left: auto;
+    margin-right: auto;
+    clear: both;
+}
+
+.post-figure__embed {
+    background: #f8f8f8;
+    border: 1px solid #eaeaea;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.post-lightbox { /* top-level backdrop (inline styles are set by JS) */
+}
+
+.post-lightbox__inner {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    background: #111;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.post-lightbox__content img {
+    display: block;
+    margin: auto;
+}
