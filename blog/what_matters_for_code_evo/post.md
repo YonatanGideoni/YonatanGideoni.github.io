@@ -41,13 +41,17 @@ We tested two fairly simple baselines. The first is IID random sampling (IID RS)
 
 ## Simple baselines are competitive in discovering mathematical bounds
 
-As AlphaEvolve is closed source, for a fair comparison we compare the baselines to an open-source alternative, ShinkaEvolve [@lange2025shinkaevolve], giving all methods a $20 budget per problem. Using 9 of the math problems from the AlphaEvolve paper as a test bed we find that the baselines perform surprisingly well, with SCS matching or exceeding ShinkaEvolve on 6/9 problems and similarly for AlphaEvolve on 4/9. This is while AlphaEvolve likely uses a much higher budget. In general, the baselines perform well relative to ShinkaEvolve over a variety of budgets, see Figure ???.
+As AlphaEvolve is closed source, for a fair comparison we compare the baselines to an open-source alternative, ShinkaEvolve [@lange2025shinkaevolve], giving all methods a $20 budget per problem. Using 9 of the math problems from the AlphaEvolve paper as a test bed we find that the baselines perform surprisingly well, with SCS matching or exceeding ShinkaEvolve on 6/9 problems and similarly for AlphaEvolve on 4/9. This is while AlphaEvolve likely uses a much higher budget. In general, the baselines perform well relative to ShinkaEvolve over a variety of budgets.
 
-[add figure you had in your poster, match/exceed on X problems, side by side with budget plot]
+<div class="figures-row">
 
-![Both baseline's performance is consistent across a range of budgets. | 100%](./images/prob_match_exceed_v_budget.png)
+![The baselines match/exceed ShinkaEvolve on 4/9 and 6/9 problems respectively given a $20 budget. SCS even matches AlphaEvolve on 4/9, in spite of AlphaEvolve likely having a much larger budget.](./images/perf_stacked_bars.png)
 
-I found these results pretty surprising. Most code evolution pipelines, like Alpha/Shinka/OpenEvolve [@novikov2025alphaevolve;@lange2025shinkaevolve;@openevolve], seem to have taken a lot of work and involve many design choices, so I didn't expect methods that you can code up in a few hours to be so competitive. If many of the search's design choices minimally affect the discovered bounds, then what does?
+![Both baselines' performance is consistent across a range of budgets.](./images/prob_match_exceed_v_budget.png)
+
+</div>
+
+These results are pretty surprising. Most code evolution pipelines, like Alpha/Shinka/OpenEvolve [@novikov2025alphaevolve;@lange2025shinkaevolve;@openevolve], seem to have taken a lot of work and involve many design choices, so I didn't expect methods that you can code up in a few hours to be so competitive. If many of the search's design choices minimally affect the discovered bounds, then what does?
 
 ### The search isn't open-ended where it matters: better verifiers lead to larger improvements than changing the search pipeline
 

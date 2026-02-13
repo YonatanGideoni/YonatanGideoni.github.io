@@ -433,3 +433,28 @@ sup {
     display: block;
     margin: auto;
 }
+
+/* =========================================================
+   Side-by-side Figures
+   ========================================================= */
+
+.figures-row {
+    display: flex;
+    gap: 20px;
+    margin: 2.5rem 0;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.figures-row .post-figure {
+    flex: 1;
+    margin: 0;
+    min-width: 0; /* allows figures to shrink below content size */
+}
+
+/* Stack on smaller screens */
+@media (max-width: 768px) {
+    .figures-row {
+        flex-direction: column;
+    }
+}
