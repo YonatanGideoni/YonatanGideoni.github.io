@@ -19,7 +19,7 @@ code: "TODO"
 #image: "./images/hero.png"
 ---
 
-A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and, as a sanity, ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
+A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and preemptively ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
 
 ![The AlphaEvolve circle-packing bound can be achieved by just repeatedly sampling an LLM. | 40%](./images/circle-packing-sampling.png)
 
@@ -41,7 +41,7 @@ We tested two fairly simple baselines. The first is IID random sampling (IID RS)
 
 ## Simple baselines are competitive in discovering mathematical bounds
 
-As AlphaEvolve is closed source, for a fair comparison we compare the baselines to an open-source alternative, ShinkaEvolve [@lange2025shinkaevolve], giving all methods a $20 budget per problem. Using 9 of the math problems from the AlphaEvolve paper as a test bed we find that the baselines perform surprisingly well, with SCS matching or exceeding ShinkaEvolve on 6/9 problems and similarly for AlphaEvolve on 4/9. This is while AlphaEvolve likely uses a much higher budget. In general, the baselines perform well relative to ShinkaEvolve over a variety of budgets.
+As AlphaEvolve is closed source, for a fair comparison we compare the baselines to an open-source alternative, ShinkaEvolve [@lange2025shinkaevolve], giving all methods a $20 budget per problem. Using 9 of the math problems from the AlphaEvolve paper as a test bed we find that the baselines perform surprisingly well, with SCS matches or exceeds ShinkaEvolve on 6/9 problems and AlphaEvolve on 4/9. This is while AlphaEvolve likely uses a much higher budget. In general, the baselines perform well relative to ShinkaEvolve over a variety of budgets.
 
 <div class="figures-row">
 
@@ -64,7 +64,7 @@ To illustrate, here's a simple example for circle packing. The default verifier 
 
 ![Circle packing definitions and constraints. | 60%](./images/circle_packing_diagram.png)
 
-Let $x_i,y_i$ and $r_i$ respectively denote the center and radius of circle $i$. Given $n$ circles in a unit sqaure, each radius has the following constraints:
+Let $x_i,y_i$ and $r_i$ respectively denote the center and radius of circle $i$. Given $n$ circles in a unit square, each radius has the following constraints:
 1. The circle can't touch the left/right walls: $x_i>r_i$ and $1> x_i+r_i$.
 2. Similarly, the circle can't touch the floor or the ceiling: $y_i>r_i$ and $1> y_i+r_i$.
 3. No two circles can overlap. Denoting $d_{ij}$ as the distance between the centers of circles $i$ and $j$, no overlap means that $r_i+r_j<d_{ij}$.
@@ -82,7 +82,7 @@ $$
 $$
 </details>
 
-A different verifier can result in finding a better bound, as is the case in one of the other problems, an uncertainty inequality. For this problem, AlphaEvolve improved the bound from a previous known best of 0.3523 to 0.3521. All three tested methods here, the two baselines and ShinkaEvolve, discovered the 0.3521 bound as well. After AlphaEvolve came out Henry Cohn commented that there are other formulations which yield even better bounds, see Appendix B.4 of [AlphaEvolve] for details. To illustrate this, I took the problem's default setup and reformulated it, specifically making it easier to optimize and use a larger function class. In practice, the reformulation results in having a different prompt and verifier. The new setup resulted in all three methods finding a new bound of 0.3482, which is better than the previous one of 0.3521, while also constituting a larger relative improvement than its predecessor of 0.3523. However, __this improvement stems from a domain expert's effort, not the automated search process__, as all three tested methods found the same bound.
+A different verifier can result in finding a better bound, as is the case in one of the other problems, an uncertainty inequality. For this problem, AlphaEvolve improved the bound from a previous known best of 0.3523 to 0.3521. All three tested methods here, the two baselines and ShinkaEvolve, discovered the 0.3521 bound as well. After AlphaEvolve came out Henry Cohn commented that there are other formulations which yield even better bounds, see Appendix B.4 of AlphaEvolve for details. To illustrate this, I took the problem's default setup and reformulated it, specifically making it easier to optimize and use a larger function class. In practice, the reformulation results in having a different prompt and verifier. The new setup resulted in all three methods finding a new bound of 0.3482, which is better than the previous one of 0.3521, while also constituting a larger relative improvement than its predecessor of 0.3523. However, __this improvement stems from a domain expert's effort, not the automated search process__, as all three tested methods found the same bound.
 
 <details>
 <summary>The uncertainty inequality and its modified formulation</summary>
@@ -134,7 +134,7 @@ This has important implications both for method development and AI-assisted scie
 
 Given these results for math problems, I was curious whether the baselines would perform well similarly in other settings, and what insights this might reveal there. This is especially interesting as the baselines might perform well under some constraints but not others. For the math problems the main bottleneck is the API budget, whereas in other cases the limit might be wall-clock time or the number of evaluations used. For the wall-clock time constraint a classic setting is machine learning competitions from MLE-bench, where each method has 24 hours to run. One case where there is a limited number of function evaluations is when searching for agentic scaffolds, with the number of evaluations being limited as each one is very expensive.
 
-Over both domains I compared the baselines to purpose-built code evolution methods. Surprisingly, the baselines also performed here quite well. How come?
+Over both domains I compared the baselines to purpose-built code evolution methods. Surprisingly, the baselines also performed here quite well. How come? Specifically for the search over agentic scaffolds, all methods, including the baselines, select subpar results due to noise.
 
 ### Agentic scaffold evaluations can be highly stochastic
 <details>
@@ -145,7 +145,7 @@ Let's say you want to solve a math problem using an LLM. You can go to ChatGPT a
 Thus, searching for a scaffold amounts to doing regular code evolution, albeit with very expensive evaluations. Typically a scaffold is limited to some amount of LLM calls per question evaluation, say 10, so evaluating 100 questions can result in 1000 LLM calls. Depending on the LLM used, an evaluation can typically cost $1-$10.
 </details>
 
-Specifically for finding agentic scaffolds, I noticed an odd result: while the IID RS baseline seemingly outperformed scaffolds found using other code evolution methods, it fell short of a hand-designed majority vote baseline. Majority vote means generating $k$ answers, with $k$ here being 5 or 10, and picking the most prevalent one as the answer.
+While evaluating the agentic scaffolds I noticed an odd result: while the IID RS baseline seemingly outperformed scaffolds found using other code evolution methods, it fell short of a hand-designed majority vote baseline. Majority vote means generating $k$ answers, with $k$ here being 5 or 10, and picking the most prevalent one as the answer.
 
 ![Scaffolds found with code evolution can seem performant due to the evaluation's inherent stochasticity -- re-evaluating shows that they were just lucky. | 100%](./images/aime_methods_compare.png)
 
