@@ -21,7 +21,7 @@ code: "TODO"
 
 A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and preemptively ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
 
-![The AlphaEvolve circle-packing bound can be achieved by just repeatedly sampling an LLM. | 40%](./images/circle-packing-sampling.png)
+![The AlphaEvolve circle-packing bound can be achieved by just repeatedly sampling an LLM. | 40%](./images/circle-packing-sampling.jpg)
 
 This led me down a rabbit hole, comparing some simple baselines to much fancier code evolution methods and finding that the baselines often get the same or even better performance. Trying to understand why the simple methods worked so well uncovered various insights and shortcomings with how code evolution is used.
 
@@ -37,7 +37,7 @@ One interesting use-case of code evolution is to find new, improved mathematical
 
 We tested two fairly simple baselines. The first is IID random sampling (IID RS) from an LLM -- asking it to produce code that solves some problem and sampling from it many times. The second baseline, sequential conditioned sampling (SCS), is very similar but is aimed at better handling sequential problems, e.g. where the solution results from iteratively growing a list over time. Specifically, after generating a set of programs, some of those that ran successfully are randomly picked to be appended to the prompt when generating a program in the next generation. This is repeated for a few generations^[{In the evolutionary algorithms sense of the word.}] and, optionally, then restarted from scratch.
 
-![The two baselines. | 100%](./images/baselines.png)
+![The two baselines. | 100%](./images/baselines.jpg)
 
 ## Simple baselines are competitive in discovering mathematical bounds
 
@@ -47,7 +47,7 @@ As AlphaEvolve is closed source, for a fair comparison we compare the baselines 
 
 ![The baselines match/exceed ShinkaEvolve on 4/9 and 6/9 problems respectively given a $20 budget. SCS even matches AlphaEvolve on 4/9, in spite of AlphaEvolve likely having a much larger budget.](./images/perf_stacked_bars.png)
 
-![Both baselines' performance is consistent across a range of budgets.](./images/prob_match_exceed_v_budget.png)
+![Both baselines' performance is consistent across a range of budgets. | 60%](./images/prob_match_exceed_v_budget.png)
 
 </div>
 
@@ -147,7 +147,7 @@ Thus, searching for a scaffold amounts to doing regular code evolution, albeit w
 
 While evaluating the agentic scaffolds I noticed an odd result: while the IID RS baseline seemingly outperformed scaffolds found using other code evolution methods, it fell short of a hand-designed majority vote baseline. Majority vote means generating $k$ answers, with $k$ here being 5 or 10, and picking the most prevalent one as the answer.
 
-![Scaffolds found with code evolution can seem performant due to the evaluation's inherent stochasticity -- re-evaluating shows that they were just lucky. | 100%](./images/aime_methods_compare.png)
+![Scaffolds found with code evolution can seem performant due to the evaluation's inherent stochasticity -- re-evaluating shows that they were just lucky. | 100%](./images/aime_methods_compare.jpg)
 
 Independently re-evaluating all scaffolds more times revealed what's going on, that the selected scaffolds were luckier than they were performant. To keep the evaluation economic scaffolds are typically evaluated on relatively small datasets, having effectively ~100 questions (including repeats). This results in very noisy evaluations, with a majority vote@5 scaffold still having a standard deviation of ~1% when evaluated on AIME 2025 10 times.^[{Each AIME year has 30 questions, so re-evaluating a scaffold 10 times results in an effective dataset size of 300 questions.}] Thus, when automatically searching over scaffolds many of the best performing scaffolds could only seem well performing, whereas in practice due to the stochasticity they were just lucky.
 
