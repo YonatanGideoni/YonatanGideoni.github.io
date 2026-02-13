@@ -19,7 +19,7 @@ code: "TODO"
 #image: "./images/hero.png"
 ---
 
-A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and, preemptively, ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
+A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and, pre-emptively, ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
 
 ![The AlphaEvolve circle-packing bound can be achieved by just repeatedly sampling an LLM. | 40%](./images/circle-packing-sampling.jpg)
 
@@ -27,21 +27,21 @@ This led me down a rabbit hole, comparing some simple baselines to much fancier 
 
 ## What's code evolution?
 
-In this context, code evolution means using a language model to find programs that solve some problem. Typically, this is done by using the language model as the mutation/recombination operator in an evolutionary algorithm. In practice code evolution pipelines can be very involved, with many other design choices like ensembling models, using an evolutionary database to improve diversity, and so on. See section 2 of the AlphaEvolve paper for more details.
+In this context, code evolution means using a language model to find programs that solve some problem. Typically, this is done by using the language model as the mutation/recombination operator in an evolutionary algorithm. In practice, code evolution pipelines can be very involved, with many other design choices like ensembling models, using an evolutionary database to improve diversity, and so on. See section 2 of the AlphaEvolve paper for more details.
 
-One interesting use-case of code evolution is to find new, improved mathematical bounds. To illustrate, consider the circle packing problem -- given a unit square with $n$ circles, what should their centers and radii be so the sum of radii is maximized? One way to find a bound is by proposing a set of centers and radii, where -- if the configuration is valid -- results in a lower bound on the max sum of radii, as the largest possible sum is guaranteed to be at least as high as any observed sum. Code evolution finds a program that either constructs such a packing directly or itself automatically searches over different configurations.
+One interesting use-case of code evolution is to find new, improved mathematical bounds. To illustrate, consider the circle packing problem -- given a unit square with $n$ circles, what should their centers and radii be so the sum of radii is maximized? One way to find a bound is by proposing a set of centers and radii, which -- if the configuration is valid -- results in a lower bound on the max sum of radii, as the largest possible sum is guaranteed to be at least as high as any observed sum. Code evolution finds a program that constructs such a packing directly or automatically searches over different configurations.
 
 ![Each problem defines a verifier that gets as input a list of numbers and outputs a bound that should be maximized/minimized. | 80%](./images/probs_as_funcs.jpg)
 
 ## Baselines
 
-I compared a few code evolution methods to two fairly simple baselines. The first is IID random sampling (IID RS) from an LLM -- asking it to produce code that solves some problem and sampling from it many times. The second baseline, sequential conditioned sampling (SCS), is similar but is aimed at better handling sequential problems, e.g. where the solution results from iteratively growing a list over time. Specifically, after generating a set of programs, some of those that ran successfully are randomly picked to be appended to the prompt, which is then used to generate the next generation's programs. This is repeated for a few generations^[{In the evolutionary algorithms sense of the word.}] and, optionally, then restarted from scratch.
+I compared a few code evolution methods to two fairly simple baselines. The first is IID random sampling (IID RS) from an LLM -- asking it to produce code that solves some problem and sampling from it many times. The second baseline, sequential conditioned sampling (SCS), is similar but is aimed at better handling sequential problems, e.g. where the solution results from iteratively growing a list over time. Specifically, after generating a set of programs, some of those that ran successfully are randomly picked to be appended to the prompt, which is then used to generate the next generation's programs. This is repeated for a few generations^[{In the evolutionary algorithm sense of the word.}] and, optionally, then restarted from scratch.
 
 ![The two baselines. | 100%](./images/baselines.jpg)
 
 ## Simple baselines are competitive in discovering mathematical bounds
 
-As AlphaEvolve is closed source, for a fair comparison I compared the baselines to an open-source alternative, ShinkaEvolve [@lange2025shinkaevolve], giving all methods a $20 API budget per problem. Using 9 of the math problems from the AlphaEvolve paper as a test bed showed that the baselines perform surprisingly well, where SCS matches or exceeds ShinkaEvolve on 6/9 problems and AlphaEvolve on 4/9. This is while AlphaEvolve likely uses a much higher budget. The baselines are not only performant but also efficient -- the baselines perform well relative to ShinkaEvolve across all tested budgets.^[{In the following figure (right) ShinkaEvolve initially does worse due to having a warmup period, relying sometimes on code diffs instead of generating full files.}]
+As AlphaEvolve is closed source, for a fair comparison I compared the baselines to an open-source alternative, ShinkaEvolve [@lange2025shinkaevolve], giving all methods a $20 API budget per problem. Using 9 of the math problems from the AlphaEvolve paper as a test bed showed that the baselines perform surprisingly well, where SCS matches or exceeds ShinkaEvolve on 6/9 problems and AlphaEvolve on 4/9. This is while AlphaEvolve likely uses a much higher budget. The baselines are not only performant but also efficient -- they perform well relative to ShinkaEvolve across all tested budgets.^[{In the following figure (right) ShinkaEvolve initially does worse due to having a warm-up period, relying sometimes on code diffs instead of generating full files.}]
 
 <div class="figures-row">
 
@@ -51,13 +51,13 @@ As AlphaEvolve is closed source, for a fair comparison I compared the baselines 
 
 </div>
 
-These results are pretty surprising. Most code evolution pipelines, like Alpha/Shinka/OpenEvolve [@novikov2025alphaevolve;@lange2025shinkaevolve;@openevolve], seem to have taken a lot of work and involve many design choices, so I didn't expect methods that you can code up in a few hours to be so competitive. If many of the search's design choices minimally affect the discovered bounds, then what does?
+These results are quite surprising. Most code evolution pipelines, like Alpha/Shinka/OpenEvolve [@novikov2025alphaevolve;@lange2025shinkaevolve;@openevolve], seem to have taken a lot of work and involve many design choices, so I didn't expect methods that you can code up in a few hours to be so competitive. If many of the search's design choices minimally affect the discovered bounds, then what does?
 
 ### The search isn't open-ended where it matters: better verifiers lead to larger improvements than changing the search pipeline
 
 Each problem's search space is implicitly defined by its verifier. A verifier is a function that gets as input a list of numbers and outputs the resulting bound. For involved math problems these verifiers can be a result of long derivations, specifying how a class of functions relates to some bound. These functions are then parameterized with a list of numbers, which the verifier translates into a new bound. Thus, a given verifier defines a problem's search space, with the specific verifier being a result of how the problem is formulated.
 
-To illustrate, here's a simple example for circle packing. The default verifier most code evolution pipelines use takes as input the centers and radii, checks whether they form a valid packing, and then sums the radii to find a new bound. However, given a list of centers it's possible to find the maximum sum of feasible radii automatically and efficiently, using a linear program. Although both verifiers have the same performance ceiling, the verifier with the linear program has a different search space as it takes as input only the circle centers.
+To illustrate, here's a simple example for circle packing. The default verifier most code evolution pipelines use takes as input the centers and radii, checks whether they form a valid packing, and then sums the radii to find a new bound. However, given a list of centers, it's possible to find the maximum sum of feasible radii automatically and efficiently, using a linear program. Although both verifiers have the same performance ceiling, the verifier with the linear program has a different search space as it takes as input only the circle centers.
 
 <details>
 <summary>Circle packing linear program</summary>
@@ -69,7 +69,7 @@ Let $x_i,y_i$ and $r_i$ respectively denote the center and radius of circle $i$.
 2. Similarly, the circle can't touch the floor or the ceiling: $y_i>r_i$ and $1> y_i+r_i$.
 3. No two circles can overlap. Denoting $d_{ij}$ as the distance between the centers of circles $i$ and $j$, no overlap means that $r_i+r_j<d_{ij}$.
 
-As the maximization objective is $\sum_{i=1}^n r_i$, both the objective and the $O(n^2)$ constraints are linear, so the maximum sum of radii can efficiently be found using any off-the-shelf linear programs solver, e.g. `scipy.optimize.linprog`. Formally, the resulting linear program is:
+As the maximization objective is $\sum_{i=1}^n r_i$, both the objective and the $O(n^2)$ constraints are linear, so the maximum sum of radii can efficiently be found using any off-the-shelf linear program solver, e.g. `scipy.optimize.linprog`. Formally, the resulting linear program is:
 
 $$
 \begin{aligned}
@@ -82,16 +82,16 @@ $$
 $$
 </details>
 
-A different verifier can result in finding a better bound, as is the case for one of the other problems, an uncertainty inequality. For this problem, AlphaEvolve improved the bound from a previous known best of 0.3523 to 0.3521. All three tested methods here, the two baselines and ShinkaEvolve, discovered the 0.3521 bound as well. After AlphaEvolve came out Henry Cohn commented that there are other formulations which yield even better bounds, see Appendix B.4 of AlphaEvolve for details. To illustrate this, I took the problem's default setup and reformulated it, specifically making it easier to optimize and use a larger function class. In practice, the reformulation results in having a different prompt and verifier. The new setup resulted in all three methods finding a new bound of 0.3482, which is better than the previous one of 0.3521, while also constituting a larger relative improvement relative to its predecessor of 0.3523. However, __this improvement stems from a domain expert's effort, not the automated search process__, as all three tested methods found the same bound.
+A different verifier can result in finding a better bound, as is the case for one of the other problems, an uncertainty inequality. For this problem, AlphaEvolve improved the bound from a previous known best of 0.3523 to 0.3521. All three tested methods here, the two baselines and ShinkaEvolve, discovered the 0.3521 bound as well. After AlphaEvolve came out Henry Cohn commented that there are other formulations which yield even better bounds, see Appendix B.4 of AlphaEvolve for details. To illustrate this, I took the problem's default setup and reformulated it, specifically making it easier to optimize and use a larger function class. In practice, the reformulation results in having a different prompt and verifier. The new setup resulted in all three methods finding a new bound of 0.3482, which is better than the previous bound of 0.3521, while also constituting a larger relative improvement relative to its predecessor of 0.3523. However, __this improvement stems from a domain expert's effort, not the automated search process__, as all three tested methods found the same bound.
 
 <details>
 <summary>The uncertainty inequality and its modified formulation</summary>
 
-The following section is taken almost verbatim from Appendix I of our paper. We first describe the problem in its generality, based on Appendix B.4 of AlphaEvolve and Gonccalves et al.[@gonccalves2017hermite] For a function $f:\mathbb{R}\to\mathbb{R}$ define its Fourier transform as $\hat{f}(x)=\int_{-\infty}^\infty f(t)e^{-2\pi i xt}dt$. Let the radius of the smallest disc for which outside of it $f$ is nonegative be defined as $A(f)\coloneqq \inf(\{r>0|\forall |x|\geq r:f(x)\geq 0\})$. In the uncertainty inequality problem we wish to find the smallest constant $C$ for which $A(f)A(\hat{f})\geq C$, under the conditions where a) $f$ is even and b) $\max(f(0),\hat{f}(0))\leq0$.
+The following section is taken almost verbatim from Appendix I of our paper. We first describe the problem in its generality, based on Appendix B.4 of AlphaEvolve and Gonçalves et al.[@gonccalves2017hermite] For a function $f:\mathbb{R}\to\mathbb{R}$ define its Fourier transform as $\hat{f}(x)=\int_{-\infty}^\infty f(t)e^{-2\pi i xt}dt$. Let the radius of the smallest disc for which outside of it $f$ is nonnegative be defined as $A(f)\coloneqq \inf(\{r>0|\forall |x|\geq r:f(x)\geq 0\})$. In the uncertainty inequality problem we wish to find the smallest constant $C$ for which $A(f)A(\hat{f})\geq C$, under the conditions that a) $f$ is even and b) $\max(f(0),\hat{f}(0))\leq0$.
 
-Denoting the $n\text{th}$ Hermite polynomial as $H_n$, Gonccalves et al. show that functions of the form $f(x)=\sum_{n=0}^\infty \alpha_nH_{4n}(\sqrt{2\pi}x)e^{-\pi x^2}$ fulfill the two conditions given that the coefficients $\alpha_n$ are chosen so $f(0)=0$. As here $\hat{f}(x)=f(x)$, this automatically fulfills condition b). As even Hermite functions are even, this fulfills condition a).
+Denoting the $n\text{th}$ Hermite polynomial as $H_n$, Gonçalves et al. show that functions of the form $f(x)=\sum_{n=0}^\infty \alpha_nH_{4n}(\sqrt{2\pi}x)e^{-\pi x^2}$ fulfill the two conditions given that the coefficients $\alpha_n$ are chosen so $f(0)=0$. As here $\hat{f}(x)=f(x)$, this automatically fulfills condition b). As even Hermite functions are even, this fulfills condition a).
 
-Gonccalves et al. construct their lower bound of 0.3523 by setting all $\alpha_n$ except for $\alpha_0,\alpha_1,\alpha_2,\alpha_3$ to zero and numerically finding which $\alpha\text{s}$ minimize $C$. This is the formulation also used by AlphaEvolve and in our main results.
+Gonçalves et al. construct their lower bound of 0.3523 by setting all $\alpha_n$ except for $\alpha_0,\alpha_1,\alpha_2,\alpha_3$ to zero and numerically finding which $\alpha\text{s}$ minimize $C$. This is the formulation also used by AlphaEvolve and in our main results.
 
 We modify this formulation in two ways. First, AlphaEvolve uses physicist's Hermite polynomials, where the leading coefficient of $H_n$ is $2^n$. This leads to numerical instabilities when attempting to use higher orders. Instead, we use the probabilist's Hermite polynomials, which are the same but rescaled, so $He_n\coloneqq \frac{H_n}{2^n}$, resulting in the leading coefficient for all polynomials being one. Our second modification is setting all $\alpha\text{s}$ beyond $\alpha_7$ to zero instead of $\alpha_3$. This allows $f(x)$ to represent a larger class of functions. It is likely possible going beyond $\alpha_7$ and reducing the bound further but we encountered numerical instabilities when trying to do so, likely from using very high order polynomials.
 </details>
