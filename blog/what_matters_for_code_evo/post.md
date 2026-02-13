@@ -62,8 +62,9 @@ To illustrate, here's a simple example for circle packing. The default verifier 
 <details>
 <summary>Circle packing linear program</summary>
 
+![Circle packing definitions and constraints. | 60%](./images/circle_packing_diagram.png)
+
 Let $x_i,y_i$ and $r_i$ respectively denote the center and radius of circle $i$. Given $n$ circles in a unit sqaure, each radius has the following constraints:
-[add a simple diagram]
 1. The circle can't touch the left/right walls: $x_i>r_i$ and $1> x_i+r_i$.
 2. Similarly, the circle can't touch the floor or the ceiling: $y_i>r_i$ and $1> y_i+r_i$.
 3. No two circles can overlap. Denoting $d_{ij}$ as the distance between the centers of circles $i$ and $j$, no overlap means that $r_i+r_j<d_{ij}$.
