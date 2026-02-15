@@ -2,6 +2,13 @@
    Global layout
    ========================================================= */
 
+/* global box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
     line-height: 1.6;
     margin: 0;
