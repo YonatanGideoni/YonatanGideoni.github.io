@@ -19,9 +19,9 @@ code: "TODO"
 #image: "./images/hero.png"
 ---
 
-A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and preemptively ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
-
 ![The AlphaEvolve circle-packing bound can be achieved by just repeatedly sampling an LLM. | 40%](./images/circle-packing-sampling.jpg)
+
+A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and preemptively ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
 
 This led me down a rabbit hole, comparing some simple baselines to much fancier code evolution methods and finding that the baselines often get the same or even better performance. Trying to understand why the simple methods worked so well uncovered various insights and shortcomings with how code evolution is used.
 
@@ -41,7 +41,7 @@ We tested two fairly simple baselines. The first is IID random sampling (IID RS)
 
 ## Simple baselines are competitive in discovering mathematical bounds
 
-As AlphaEvolve is closed source, for a fair comparison we compare the baselines to an open-source alternative, ShinkaEvolve [@lange2025shinkaevolve], giving all methods a $20 budget per problem. Using 9 of the math problems from the AlphaEvolve paper as a test bed we find that the baselines perform surprisingly well, with SCS matches or exceeds ShinkaEvolve on 6/9 problems and AlphaEvolve on 4/9. This is while AlphaEvolve likely uses a much higher budget. In general, the baselines perform well relative to ShinkaEvolve over a variety of budgets.
+As AlphaEvolve is closed source, for a fair comparison we compare the baselines to an open-source alternative, ShinkaEvolve [@lange2025shinkaevolve], giving all open-source methods a $20 budget per problem. Using 9 of the math problems from the AlphaEvolve paper as a test bed we find that the baselines perform surprisingly well, with SCS matches or exceeds ShinkaEvolve on 6/9 problems and AlphaEvolve on 4/9. This is while AlphaEvolve likely uses a much higher budget. In general, the baselines perform well relative to ShinkaEvolve over a variety of budgets.
 
 <div class="figures-row">
 
@@ -82,7 +82,7 @@ $$
 $$
 </details>
 
-A different verifier can result in finding a better bound, as is the case in one of the other problems, an uncertainty inequality. For this problem, AlphaEvolve improved the bound from a previous known best of 0.3523 to 0.3521. All three tested methods here, the two baselines and ShinkaEvolve, discovered the 0.3521 bound as well. After AlphaEvolve came out Henry Cohn commented that there are other formulations which yield even better bounds, see Appendix B.4 of AlphaEvolve for details. To illustrate this, I took the problem's default setup and reformulated it, specifically making it easier to optimize and use a larger function class. In practice, the reformulation results in having a different prompt and verifier. The new setup resulted in all three methods finding a new bound of 0.3482, which is better than the previous one of 0.3521, while also constituting a larger relative improvement than its predecessor of 0.3523. However, __this improvement stems from a domain expert's effort, not the automated search process__, as all three tested methods found the same bound.
+A different verifier can result in finding a better bound, as is the case in one of the other problems, an uncertainty inequality. For this problem, AlphaEvolve improved the bound from a previous known best of 0.3523 to 0.3521. All three tested methods here, the two baselines and ShinkaEvolve, discovered the 0.3521 bound as well. After AlphaEvolve came out Henry Cohn commented that there are other formulations which yield even better bounds, see Appendix B.4 of AlphaEvolve for details. To illustrate how a problem formulation that leads to a better verifier affects performance, I took the problem's default setup and manually improved the formulation.^[{Specifically I made it easier to optimize and use a larger function class.}] In practice, the reformulation results in having a different prompt and verifier. The new setup resulted in all three methods finding a new bound of 0.3482, which is better than the previous one of 0.3521, while also constituting a larger relative improvement than its predecessor of 0.3523. However, __this improvement stems from a domain expert's effort, not the automated search process__, as all three tested methods found the same bound.
 
 <details>
 <summary>The uncertainty inequality and its modified formulation</summary>
@@ -149,7 +149,7 @@ While evaluating the agentic scaffolds I noticed an odd result: while the IID RS
 
 ![Scaffolds found with code evolution can seem performant due to the evaluation's inherent stochasticity -- re-evaluating shows that they were just lucky. | 100%](./images/aime_methods_compare.jpg)
 
-Independently re-evaluating all scaffolds more times revealed what's going on, that the selected scaffolds were luckier than they were performant. To keep the evaluation economic scaffolds are typically evaluated on relatively small datasets, having effectively ~100 questions (including repeats). This results in very noisy evaluations, with a majority vote@5 scaffold still having a standard deviation of ~1% when evaluated on AIME 2025 10 times.^[{Each AIME year has 30 questions, so re-evaluating a scaffold 10 times results in an effective dataset size of 300 questions.}] Thus, when automatically searching over scaffolds many of the best performing scaffolds could only seem well performing, whereas in practice due to the stochasticity they were just lucky.
+Independently re-evaluating all scaffolds more times revealed what's going on, that the selected scaffolds were luckier than they were performant. To keep the evaluation economic scaffolds are typically evaluated on relatively small datasets, having effectively ~100 questions (including repeats), see Appendix E of [@hu2024automated]. This results in very noisy evaluations, with a majority vote@5 scaffold still having a standard deviation of ~1% when evaluated on AIME 2025 10 times.^[{Each AIME year has 30 questions, so re-evaluating a scaffold 10 times results in an effective dataset size of 300 questions.}] Thus, when automatically searching over scaffolds many of the best performing scaffolds could only seem well performing, whereas in practice due to the stochasticity they were just lucky.
 
 ![Accuracy distribution for a majority vote@5 scaffold evaluated on AIME 2025. In typical setups, where the dataset is evaluated only 3 times, noise in the sampled accuracies can wash out the underlying signal. | 70%](./images/aime_majv5_dist.png)
 
