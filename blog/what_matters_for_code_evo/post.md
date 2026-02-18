@@ -19,7 +19,13 @@ code: "TODO"
 #image: "./images/hero.png"
 ---
 
+<div class="figures-row">
+
 ![The AlphaEvolve circle-packing bound can be achieved by just repeatedly sampling an LLM. | 40%](./images/circle-packing-sampling.jpg)
+
+![High variance in agentic scaffold evaluations can lead to methods erroneously seeming better. | 40%](./images/scaffold_bars.jpg)
+
+</div>
 
 A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and preemptively ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
 
@@ -202,3 +208,14 @@ You can find the full paper here(TODO) and the code here(TODO), including some m
 - Future methods run fair comparisons, using the same prompts and hence domain knowledge, verifiers and hence search spaces, budgets, and any other factors that could be meaningful. Otherwise, improvements could be not from the underlying search method but other, orthogonal changes.
 - When automatically searching for agentic scaffolds, use an evaluation cascade to reduce stochasticity and the probability of dominance to robustly pick out the best one. When reporting results we recommend using 95% confidence intervals as the distribution of answers is often noisy.
 - Future works clearly say if their main contribution is a scientific discovery or a new search method they propose. If it's a discovery then the problem formulations and domain knowledge used in the prompts should be clearly shared, as they may be what enabled the discovery. For search methods, use simple baselines!
+
+##
+
+<div class="acknowledgements">
+
+### Acknowledgements
+This work was partially done during an internship at Sakana AI. Thanks to much of the research team there for fruitful discussions, and especially to Robert Lange for helping with the ShinkaEvolve runs and discussing the work throughout. Thanks as well to Yujin Tang who provided good feedback and support that spurred the development of an earlier version of this work. Thanks also to Dulhan Jayalath for feedback on an earlier draft, to Noya Gideoni and Katrina Dickson for proofreading it, and to Edan Toledo for feedback and some help with the MLE bench setup.
+
+We thank the Oxford ARC cluster for providing the GPUs for the MLE bench experiments. Yonatan is funded by the Rhodes Trust and the AIMS EPSRC CDT (grant no. EP/S024050/1).
+
+</div>
