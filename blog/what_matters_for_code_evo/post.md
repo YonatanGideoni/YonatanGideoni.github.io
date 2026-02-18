@@ -15,8 +15,7 @@ authors:
     affiliations:
       - "University of Oxford"
 paper: "TODO"
-code: "TODO"
-#image: "./images/hero.png"
+code: "https://github.com/YonatanGideoni/code_evo_simple_baselines"
 ---
 
 <div class="figures-row">
@@ -204,7 +203,7 @@ More methodical approaches, like relying on simple methods and gradually buildin
 
 Part of the reason the discovered shortcomings weren't widely discussed before is likely due to conflating proposing good search methods and scientific discovery. A scientific discovery is valuable in and of itself, but it might be possible finding it using a very simple search. When proposing search methods it's important to compare them to simple baselines while having the same settings (prompts and hence domain knowledge, verifiers, etc.). Meanwhile, scientific discoveries should specify the exact domain knowledge used, problem formulation, and so on as that guidance may be what made the discovery at all possible.
 
-You can find the full paper here(TODO) and the code here(TODO). In conclusion, we recommend that:
+You can find the full paper [here](TODO) and the code [here](https://github.com/YonatanGideoni/code_evo_simple_baselines). In conclusion, we recommend that:
 - Future methods run fair comparisons, using the same prompts and domain knowledge in them, verifiers and hence search spaces, budgets, and any other factors that could be meaningful. Otherwise, improvements may come not from the underlying search method but other, orthogonal changes.
 - When automatically searching for agentic scaffolds, use an evaluation cascade to reduce stochasticity and the probability of dominance to robustly pick out the best one. When reporting results, we recommend using 95% confidence intervals as the distribution of answers is often noisy.
 - Future works should clearly state whether their main contribution is a scientific discovery or a new search method they propose. If it's a discovery then the problem formulations and domain knowledge used in the prompts should be clearly shared, as they may be what enabled the discovery. For search methods, use simple baselines!
