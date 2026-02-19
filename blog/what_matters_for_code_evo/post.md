@@ -40,7 +40,7 @@ One interesting use-case of code evolution is to find new, improved mathematical
 
 ## Baselines
 
-I compared a few code evolution methods to two fairly simple baselines. The first is IID random sampling (IID RS) from an LLM -- asking it to produce code that solves some problem and sampling from it many programs. The second baseline, sequential conditioned sampling (SCS), is similar but is aimed at better handling sequential problems, e.g. where the solution results from iteratively growing a list over time. Specifically, after generating a set of programs, some of those that ran successfully are randomly picked to be appended to the prompt, which is then used to generate the programs in the next generation. This is repeated for a few generations^[{In the evolutionary algorithm sense of the word.}] and, optionally, then restarted from scratch.
+I compared a few code evolution methods to two fairly simple baselines. The first is IID random sampling (IID RS) from an LLM -- asking it to produce code that solves some problem and sampling from it many programs. The second baseline, sequential conditioned sampling (SCS), is similar but is aimed at better handling sequential problems, e.g. where the solution results from iteratively growing a list over time. Specifically, after generating a set of programs, some of those that ran successfully are randomly picked to be appended to the prompt, which is then used to generate the programs in the next set. This is repeated a few times and, optionally, then restarted from scratch.
 
 ![The two baselines. | 100%](./images/baselines.jpg)
 
@@ -203,6 +203,7 @@ More methodical approaches, like relying on simple methods and gradually buildin
 
 Part of the reason the discovered shortcomings weren't widely discussed before is likely due to conflating proposing good search methods and scientific discovery. A scientific discovery is valuable in and of itself, but it might be possible finding it using a very simple search. When proposing search methods it's important to compare them to simple baselines while having the same settings (prompts and hence domain knowledge, verifiers, etc.). Meanwhile, scientific discoveries should specify the exact domain knowledge used, problem formulation, and so on as that guidance may be what made the discovery at all possible.
 
+### Recommendations for future work
 You can find the full paper [here](TODO) and the code [here](https://github.com/YonatanGideoni/code_evo_simple_baselines). In conclusion, we recommend that:
 - Future methods run fair comparisons, using the same prompts and domain knowledge therein, verifiers and hence search spaces, budgets, and any other factors that could be meaningful. Otherwise, improvements may come not from the underlying search method but from other, orthogonal changes.
 - When automatically searching for agentic scaffolds, use an evaluation cascade to reduce stochasticity and the probability of dominance to robustly pick out the best one. When reporting results, we recommend re-evaluating scaffolds a sufficient number of times and using 95% confidence intervals as the distribution of answers is often noisy.
