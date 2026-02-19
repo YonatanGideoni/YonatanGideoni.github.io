@@ -133,7 +133,7 @@ These hints can be significant and accidentally lead to unfair comparisons, as a
 A recent paper by Terence Tao and others showed similar results [@georgiev2025mathematical]. There, they used AlphaEvolve to search for better bounds over a set of 67 problems. On page 7 they note that
 > ...we have found that the advice one gives to AlphaEvolve in the prompt has a significant impact on the quality of the final construction. Giving AlphaEvolve an insightful piece of expert advice in the prompt almost always led to significantly better results...
 
-This has important implications both for method development and AI-assisted scientific discovery. When developing methods it's important to have comparisons use the same domain knowledge in the prompts, otherwise improvements might be from the auxiliary knowledge and not the method itself. For scientific discovery, when reporting results it is important to also mention the knowledge used to steer a method, as this knowledge may be what makes the discovery at all possible.
+This has important implications both for method development and AI-assisted scientific discovery.^[{Technically the problems here are in the sub-domain of mathematical discovery, the broader term of scientific discovery is used to remain consistent with previous works.}] When developing methods it's important to have comparisons use the same domain knowledge in the prompts, otherwise improvements might be from the auxiliary knowledge and not the method itself. For scientific discovery, when reporting results it is important to also mention the knowledge used to steer a method, as this knowledge may be what makes the discovery at all possible.
 
 ## Other domains
 
