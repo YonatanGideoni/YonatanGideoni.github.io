@@ -26,9 +26,9 @@ code: "https://github.com/YonatanGideoni/code_evo_simple_baselines"
 
 </div>
 
-A few months ago I read the AlphaEvolve paper[@novikov2025alphaevolve] and found it really interesting. I started working on a project building on it and, pre-emptively, ran some simple baselines. Surprisingly, they performed really well -- relative to AlphaEvolve, randomly sampling from an LLM many times quickly gave the same results.
+When working on a project I find it useful to run very simple baselines as sanity checks. ML has a long history of simple methods either showing that our intuitions are wrong [@adebayo2018sanity;@ferrari2019we;@chen2021exploring] or working surprisingly well [@salimans2017evolution;@mania2018simple;@sutton2019bitter;@gulrajani2020search]. A few months back I was working on a project trying to build on AlphaEvolve [@novikov2025alphaevolve] and ran some random search baselines. Lo and behold, the baselines and AlphaEvolve performed equally well. This was unexpected -- why would something you can code up in a few hours match methods that are far more developed?
 
-This led me down a rabbit hole, comparing some simple baselines to much fancier code evolution methods and finding that the baselines often match if not outperform domain-specific methods. Trying to understand why the simple methods worked so well uncovered various insights and shortcomings with how code evolution is used.
+This led me down a rabbit hole, running more comparisons between simple baselines and much fancier code evolution methods. Time and time again, the baselines often matched if not outperformed domain-specific pipelines. Trying to understand why the simple methods worked so well eventually uncovered various insights and shortcomings with how code evolution is used.
 
 ## What's code evolution?
 
@@ -197,7 +197,7 @@ Although it is expensive to calculate the probability of dominance exactly, it c
 
 ## In conclusion
 
-For reinforcement learning there have been an abundance of papers over the years showing that methods are not evaluated properly, seemingly innocuous design choices are actually significant, and some improvements are not as robust as they seemed [@agarwal2021deep;@henderson2018deep;@engstrom2020implementation;@huang202237]. Code evolution might be in a similar state to the wild west that RL once was, where the field is blooming but we don't yet fully understand what matters.
+For reinforcement learning there have been an abundance of papers over the years showing that methods are not evaluated properly, seemingly innocuous design choices are actually significant, and some improvements are not as robust as they seemed [@mania2018simple;@agarwal2021deep;@henderson2018deep;@engstrom2020implementation;@huang202237]. Code evolution might be in a similar state to the wild west that RL once was, where the field is blooming but we don't yet fully understand what matters.
 
 More methodical approaches, like relying on simple methods and gradually building them up, could offer a way forward. When something seems fishy it can be investigated in isolation, and the sources of improvements can become much clearer.^[{There are many interesting tidbits we found while investigating the baselines that didn't make it to either the paper or this blog post. For example, although many code evolution methods have various mechanisms designed to increase diversity, in practice they tend to get locked into bad search paths. This leads to "code bloat" [@langdon1997fitness], where the programs become longer and longer but effective improvements grind to a halt.}] This is only part of the story, as good comparisons also require standardized benchmarks, which are only starting to emerge.
 
