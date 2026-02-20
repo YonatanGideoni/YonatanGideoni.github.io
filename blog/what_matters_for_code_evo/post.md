@@ -18,13 +18,7 @@ paper: "https://arxiv.org/abs/2602.16805"
 code: "https://github.com/YonatanGideoni/code_evo_simple_baselines"
 ---
 
-<div class="figures-row">
-
-![The AlphaEvolve circle-packing bound can be achieved by just repeatedly sampling an LLM. | 40%](./images/circle-packing-sampling.jpg)
-
-![High variance in agentic scaffold evaluations can lead to methods erroneously seeming better. | 40%](./images/scaffold_bars.jpg)
-
-</div>
+![Simple baselines like repeatedly sampling an LLM can match or outperform much more sophisticated code evolution pipelines. | 80%](./images/pipeline-compare.jpg)
 
 When working on a project I find it useful to run very simple baselines as sanity checks. ML has a long history of simple methods either showing that our intuitions are wrong [@adebayo2018sanity;@ferrari2019we;@chen2021exploring] or working surprisingly well [@salimans2017evolution;@mania2018simple;@sutton2019bitter;@gulrajani2020search]. A few months back I was working on a project trying to build on AlphaEvolve [@novikov2025alphaevolve] and ran some random search baselines. Lo and behold, the baselines and AlphaEvolve performed equally well. This was unexpected -- why would something you can code up in a few hours match methods that are far more developed?
 
