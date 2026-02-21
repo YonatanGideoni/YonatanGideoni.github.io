@@ -208,7 +208,7 @@ You can find the full paper [here](https://arxiv.org/abs/2602.16805) and the cod
 <div class="acknowledgements">
 
 ### Acknowledgements
-This work was partially done during an internship at Sakana AI. Thanks to much of the research team there for fruitful discussions, and especially to Robert Lange for helping with the ShinkaEvolve runs and discussing the work throughout. Thanks as well to Yujin Tang who provided good feedback and support that spurred the development of an earlier version of this work. Thanks also to Dulhan Jayalath for feedback on an earlier draft, to Noya Gideoni and Katrina Dickson for proofreading it, and to Edan Toledo for feedback and some help with the MLE bench setup.
+Many thanks to Yarin for giving feedback on this blog post. This work was partially done during an internship at Sakana AI. Thanks to much of the research team there for fruitful discussions, and especially to Robert Lange for helping with the ShinkaEvolve runs and discussing the work throughout. Thanks as well to Yujin Tang who provided good feedback and support that spurred the development of an earlier version of this work. Thanks also to Dulhan Jayalath for feedback on an earlier draft, to Noya Gideoni and Katrina Dickson for proofreading it, and to Edan Toledo for feedback and some help with the MLE bench setup.
 
 We thank the Oxford ARC cluster for providing the GPUs for the MLE bench experiments. Yonatan is funded by the Rhodes Trust and the AIMS EPSRC CDT (grant no. EP/S024050/1).
 
